@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>OG-VLA</title>
+    <meta name="description" content="OG-VLA: 3D-Aware Vision Language Action Model via Orthographic Image Generation">
+    <meta name="keywords" content="Generalization, Manipulation">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css_js/bulma.min.css">
+    <link rel="stylesheet" href="./static/css_js/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css_js/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css_js/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css_js/index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/css_js/fontawesome.all.min.js"></script>
+    <script src="./static/css_js/bulma-carousel.min.js"></script>
+    <script src="./static/css_js/bulma-slider.min.js"></script>
+    <script src="./static/css_js/index.js"></script>
+
+    <style>
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Creates a 3-column grid */
+            gap: 10px; /* Adds some space between the videos */
+            max-width: 1000px; /* Adjust based on your preference */
+            margin: auto; /* Center the grid horizontally */
+        }
+        .video-grid video {
+            width: 100%; /* Makes video fill the cell */
+            aspect-ratio: 16 / 9; /* Keeps the aspect ratio of videos */
+        }
+        .video-section-header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        #perturbation-task-video {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+
+<!-- <script>
+    function init() {
+        const video = document.getElementById("perturbation-task-video");
+        video.addEventListener("error", () => {
+            console.log("Error loading video: ", video.src), ". Setting default to none";
+            if(video.src.includes("undefined")) {
+                console.log("Don't have an undefined version of the clip, just crash");
+                return;
+            }
+            const task = document.getElementById("single-menu-tasks").value;
+            const uri = "static/videos/perturbations/" + task + "-undefined.mp4";
+            video.src = uri;
+            video.playbackRate = 1.75;
+            video.play();
+        }, true);
+    }
+    function updateSingleVideo() {
+        const task = document.getElementById("single-menu-tasks").value;
+        const perturbation = document.getElementById("single-menu-perturbations").value;
+        const video = document.getElementById("perturbation-task-video");
+        const uri = "static/videos/perturbations/" + task + "-" + perturbation + ".mp4"
+        video.src = uri;
+        video.playbackRate = 1.75;
+        video.play();
+    }
+</script> -->
+</head>
+
+<body onload="">
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">
+                            OG-VLA: 3D-Aware Vision Language Action Model via Orthographic Image Generation
+                        </h1>
+                        <h3 class="title is-4 conference-authors">
+                            <a target="_blank" href="https://og-vla.github.io/">
+                                CoRL 2025 Submission
+                            </a>
+                        </h3>
+
+
+    <!-- Teaser and Abstract -->
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Abstract -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            We introduce OG-VLA, a novel architecture and learning framework that combines the generalization strengths of Vision Language Action models (VLAs) with the robustness of 3D-aware policies. 
+                            We address the challenge of mapping natural language instructions and multi-view RGBD observations to quasi-static robot actions. 
+                            3D-aware robot policies achieve state-of-the-art performance on precise robot manipulation tasks, but struggle with generalization to unseen instructions, scenes, and objects. 
+                            On the other hand, VLAs excel at generalizing across instructions and scenes, but can be sensitive to camera and robot pose variations. 
+                            We leverage prior knowledge embedded in language and vision foundation models to improve generalization of 3D-aware keyframe policies. 
+                            OG-VLA projects input observations from diverse views into a point cloud which is then rendered from canonical orthographic views, ensuring input view invariance and consistency between input and output spaces. 
+                            These canonical views are processed with a vision backbone, a Large Language Model (LLM), and an image diffusion model to generate images that encode the next position and orientation of the end-effector on the input scene. 
+                            Evaluations on the Arnold and Colosseum benchmarks demonstrate state-of-the-art generalization to unseen environments, with over 40% relative improvements while maintaining robust performance in seen settings. 
+                            We also show real-world adaption in 3 to 5 demonstrations along with strong generalization.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- /Abstract -->
+        </div>
+    </section>
+    
+    <!-- Video presentation -->
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Video -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Video</h2>
+                    <div class="content has-text-justified">
+                        <video id="overview" controls playsinline height="100%">
+                            <source src="./static/media/Overview_ogvla_supplementary.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success cases - OG-VLA -->
+    <section class="hero is-light is-small">
+        <div class="hero-body">
+            <div class="container">
+                <h2 class="title is-3">Success cases</h2>
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Novel Pose Evaluations</h3>
+                </div>
+                <div id="pose-results-carousel" class="carousel results-carousel">
+                    
+                    <div class="item item-steve">
+                        <video id="pose-steve" autoplay muted loop playsinline>
+                            <source src="./static/media/success/np/close the drawer_trajectory_19.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullbody">
+                        <video id="pose-fullbody" autoplay muted loop playsinline>
+                            <source src="./static/media/success/np/put the cube in the drawer_trajectory_19.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="pose-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/success/np/open the drawer_trajectory_19.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-blueshirt">
+                        <video id="pose-blueshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/np/open the drawer_trajectory_23.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-yellowshirt">
+                        <video id="pose-yellowshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/np/close the drawer_trajectory_6.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-redshirt">
+                        <video id="pose-redshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/np/pickup the marker_trajectory_5.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Novel Object Evaluations</h3>
+                </div>
+                <div id="object-results-carousel" class="carousel results-carousel">
+                    <div class="item item-steve">
+                        <video id="object-steve" autoplay muted loop playsinline>
+                            <source src="./static/media/success/no/put the cube in the drawer_trajectory_35.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullbody">
+                        <video id="object-fullbody" autoplay muted loop playsinline>
+                            <source src="./static/media/success/no/put bottle in the drawer_trajectory_25.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="object-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/success/no/pickup the marker_trajectory_7.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-blueshirt">
+                        <video id="object-blueshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/no/pickup the marker_trajectory_6.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-yellowshirt">
+                        <video id="object-yellowshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/no/put the cube in the drawer_trajectory_38.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-redshirt">
+                        <video id="object-redshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/no/pickup cube_trajectory_12.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Novel Scene Evaluations</h3>
+                </div>
+                <div id="scene-results-carousel" class="carousel results-carousel">
+                    <div class="item item-steve">
+                        <video id="scene-steve" autoplay muted loop playsinline>
+                            <source src="./static/media/success/ns/open the drawer_trajectory_48.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullbody">
+                        <video id="scene-fullbody" autoplay muted loop playsinline>
+                            <source src="./static/media/success/ns/pickup cube_trajectory_19.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="scene-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/success/ns/pickup cube_trajectory_24.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-blueshirt">
+                        <video id="scene-blueshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/ns/put the cube in the drawer_trajectory_32.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-yellowshirt">
+                        <video id="scene-yellowshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/ns/close the drawer_trajectory_39.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-redshirt">
+                        <video id="scene-redshirt" autoplay muted loop playsinline>
+                            <source src="./static/media/success/ns/close the drawer_trajectory_8.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Failure cases - OG-VLA -->
+    <section class="hero is-small">
+        <div class="hero-body">
+            <div class="container">
+                <h2 class="title is-3">Failure cases</h2>
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Novel Pose Evaluations</h3>
+                </div>
+                <div id="pose-results-carousel" class="carousel results-carousel">
+                    <div class="item item-steve">
+                        <video id="pose-steve" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/np/close the drawer_trajectory_5.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullbody">
+                        <video id="pose-fullbody" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/np/open the drawer_trajectory_1.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="pose-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/np/open the drawer_trajectory_20.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="pose-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/np/open the drawer_trajectory_20.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Novel Object Evaluations</h3>
+                </div>
+                <div id="object-results-carousel" class="carousel results-carousel">
+                    <div class="item item-steve">
+                        <video id="object-steve" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/no/put the bottle in the drawer_trajectory_30.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullbody">
+                        <video id="object-fullbody" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/no/put the cube in the drawer_trajectory_33.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="object-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/no/put the cube in the drawer_trajectory_37.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="object-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/no/put the cube in the drawer_trajectory_37.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Novel Scene Evaluations</h3>
+                </div>
+                <div id="scene-results-carousel" class="carousel results-carousel">
+                    <div class="item item-steve">
+                        <video id="scene-steve" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/ns/open the drawer_trajectory_40.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullbody">
+                        <video id="scene-fullbody" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/ns/open the drawer_trajectory_41.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="scene-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/ns/pickup cube_trajectory_9.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="scene-shiba" autoplay muted loop playsinline>
+                            <source src="./static/media/failure/ns/pickup cube_trajectory_9.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column">
+                    <div class="content has-text-centered">
+                        <p>
+                            Website template borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a>
+                            made by the amazing <a href="https://keunhong.com/">Keunhong Park</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- /Footer -->
+
+</body>
+</html>
